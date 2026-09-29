@@ -1,0 +1,7 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  exclude:
+    # A Lumina game project packed as a game template: its Dart
+    # code belongs to that project (package:arena, package:lumina), not here.
+    - test/fixtures/**

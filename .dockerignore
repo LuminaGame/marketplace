@@ -1,0 +1,9 @@
+.git
+.env
+**/.dart_tool
+**/build
+**/data
+**/pubspec_overrides.yaml
+test-assets
+web/
+todo/

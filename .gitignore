@@ -1,0 +1,37 @@
+# Dart / Flutter
+.dart_tool/
+build/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+coverage/
+*.iml
+.idea/
+.vscode/
+.DS_Store
+*.log
+
+# Local pub overrides (e.g. pointing web/ at a different engine checkout)
+pubspec_overrides.yaml
+
+# Web build output and the copied flutter_filament WebAssembly module
+/web/build/
+/web/web/filament/
+
+# Shared test assets: a junction/symlink to the workspace's test-assets
+/test-assets
+/test-assets/
+
+# Server data (SQLite database + blob storage) — never committed
+/server/data/
+/data/
+*.db
+*.db-shm
+*.db-wal
+
+# Local secrets (copy .env.example to .env)
+.env
+.env.*
+!.env.example

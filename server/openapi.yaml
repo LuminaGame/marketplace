@@ -1,0 +1,701 @@
+openapi: 3.1.0
+info:
+  title: Lumina Marketplace API
+  version: 1.0.0
+  description: >-
+    Accounts, listings with versioned uploads, free licenses (content vs code), ownership attestation,
+    moderation, search, the library and install manifests. Every error is
+    {"error": {"code", "message", "details"}}. URLs in responses (media, manifest files) are server-relative.
+servers:
+  - url: http://127.0.0.1:8787
+    description: Local development server
+tags:
+  - name: accounts
+  - name: catalogue
+  - name: listings
+  - name: publishing
+  - name: library
+  - name: moderation
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Access token from sign-up / log-in / refresh (15 minutes). Expired → 401 token_expired.
+  parameters:
+    ListingId:
+      name: id
+      in: path
+      required: true
+      description: Listing id (or slug where noted).
+      schema: {type: string}
+    Version:
+      name: version
+      in: path
+      required: true
+      schema: {type: string, example: 1.0.0}
+    Username:
+      name: username
+      in: path
+      required: true
+      schema: {type: string}
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: {type: string, example: license_required}
+            message: {type: string}
+            details: {type: object}
+    User:
+      type: object
+      properties:
+        id: {type: string}
+        username: {type: string}
+        displayName: {type: string}
+        email: {type: string, description: Only for the caller's own account.}
+        avatarUrl: {type: [string, 'null']}
+        role: {type: string, enum: [user, moderator, admin]}
+        status: {type: string, enum: [active, suspended]}
+        createdAt: {type: string, format: date-time}
+    AuthSession:
+      type: object
+      description: The refresh token is also set as the httpOnly cookie lm_refresh (Path=/api/v1/auth).
+      properties:
+        accessToken: {type: string}
+        refreshToken: {type: string}
+        expiresIn: {type: integer, description: Seconds.}
+        tokenType: {type: string, example: Bearer}
+        user: {$ref: '#/components/schemas/User'}
+    Publisher:
+      type: object
+      properties:
+        id: {type: string}
+        username: {type: string}
+        displayName: {type: string}
+        avatarUrl: {type: [string, 'null']}
+    License:
+      type: object
+      properties:
+        id: {type: string, example: CC0-1.0}
+        name: {type: string}
+        kind: {type: string, enum: [content, code]}
+        url: {type: string}
+        spdxUrl: {type: string}
+        attributionRequired: {type: boolean}
+        shareAlike: {type: boolean}
+        summary: {type: string}
+    Version:
+      type: object
+      properties:
+        id: {type: string}
+        version: {type: string}
+        releaseNotes: {type: string}
+        engineVersion: {type: string}
+        contentLicense: {type: [string, 'null']}
+        codeLicense: {type: [string, 'null']}
+        archiveKind: {type: string, enum: [zip, json]}
+        fileName: {type: string}
+        size: {type: integer}
+        sha256: {type: string}
+        fileCount: {type: integer}
+        downloadCount: {type: integer}
+        createdAt: {type: string, format: date-time}
+        previewModelUrl:
+          type: [string, 'null']
+          description: >-
+            Public URL of the version's preview model (a self-contained .glb the server derived from the archive at
+            publish time: the largest .glb, packed .gltf or mesh .lmas payload within MARKETPLACE_MAX_PREVIEW_MB).
+            Model listings only; null when there is none.
+        previewModelSha256: {type: [string, 'null']}
+        previewModelSize: {type: [integer, 'null']}
+        previewModelSource: {type: [string, 'null'], description: The archive path the preview was derived from.}
+    Listing:
+      type: object
+      properties:
+        id: {type: string}
+        slug: {type: string}
+        title: {type: string}
+        description: {type: string, description: Markdown.}
+        category: {type: string, enum: [model, blueprint, material, texture, sound, animation, game_template, plugin, theme]}
+        tags: {type: array, items: {type: string}}
+        engineVersion: {type: string}
+        priceCents: {type: integer, description: Always 0 for now (free only).}
+        currency: {type: string}
+        status: {type: string, enum: [draft, published, unlisted]}
+        featured: {type: boolean}
+        publisher: {$ref: '#/components/schemas/Publisher'}
+        screenshots: {type: array, items: {type: string}}
+        downloadCount: {type: integer}
+        contentLicense: {type: [string, 'null']}
+        codeLicense: {type: [string, 'null']}
+        latestVersion: {$ref: '#/components/schemas/Version'}
+        previewModelUrl: {type: [string, 'null'], description: The latest version's previewModelUrl (the listing page shows a 3D view when set).}
+        versions: {type: array, items: {$ref: '#/components/schemas/Version'}, description: Detail endpoint only.}
+        unlistedBy: {type: string, enum: [owner, moderator]}
+        unlistedReason: {type: string}
+        inLibrary: {type: boolean, description: Detail endpoint, signed in.}
+        createdAt: {type: string, format: date-time}
+        updatedAt: {type: string, format: date-time}
+        publishedAt: {type: [string, 'null'], format: date-time}
+    ListingPage:
+      type: object
+      properties:
+        items: {type: array, items: {$ref: '#/components/schemas/Listing'}}
+        total: {type: integer}
+        page: {type: integer}
+        pageSize: {type: integer}
+    Upload:
+      type: object
+      properties:
+        id: {type: string}
+        fileName: {type: string}
+        kind: {type: string, enum: [zip, json]}
+        size: {type: integer}
+        sha256: {type: string}
+        files: {type: array, items: {type: object, properties: {path: {type: string}, size: {type: integer}}}}
+        detectedLicenseKinds: {type: array, items: {type: string, enum: [content, code]}}
+        skippedPaths: {type: array, items: {type: string}, description: "Plugin uploads: generated folders left out (build/, .dart_tool/, .git/, …), ending in /."}
+        skippedFileCount: {type: integer}
+        plugin:
+          $ref: '#/components/schemas/PluginPackage'
+          description: Set when the upload named ?category=plugin.
+    InstallManifest:
+      type: object
+      properties:
+        formatVersion: {type: integer, example: 1}
+        listingId: {type: string}
+        slug: {type: string}
+        title: {type: string}
+        category: {type: string}
+        version: {type: string}
+        engineVersion: {type: string}
+        publisher: {$ref: '#/components/schemas/Publisher'}
+        installKind: {type: string, enum: [project_contents, plugin, theme, game_template]}
+        targetRoot: {type: string, example: contents/Marketplace/lumina/Barrel/}
+        folderName: {type: string, example: Barrel}
+        archive:
+          type: object
+          properties: {url: {type: string}, sha256: {type: string}, size: {type: integer}}
+        licenses: {type: array, items: {$ref: '#/components/schemas/License'}}
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              path: {type: string}
+              size: {type: integer}
+              sha256: {type: string}
+              target: {type: string, example: contents/Marketplace/lumina/Barrel/bent_barrel.glb}
+              url: {type: string}
+    LibraryEntry:
+      type: object
+      properties:
+        listing: {$ref: '#/components/schemas/Listing'}
+        acquiredAt: {type: string, format: date-time}
+    Report:
+      type: object
+      properties:
+        id: {type: string}
+        listingId: {type: string}
+        listingTitle: {type: string}
+        listingStatus: {type: string}
+        publisher: {$ref: '#/components/schemas/Publisher'}
+        reporter: {type: string}
+        reason: {type: string, enum: [stolen_content, license_violation, malware, broken, inappropriate, spam, other]}
+        details: {type: string}
+        status: {type: string, enum: [open, dismissed, actioned]}
+        createdAt: {type: string, format: date-time}
+        resolvedBy: {type: [string, 'null']}
+        resolvedAt: {type: [string, 'null']}
+        resolutionNote: {type: [string, 'null']}
+    AuditEntry:
+      type: object
+      properties:
+        id: {type: integer}
+        actor: {type: string}
+        action: {type: string, example: listing.unlist}
+        targetType: {type: string}
+        targetId: {type: string}
+        details: {type: object}
+        createdAt: {type: string, format: date-time}
+    Terms:
+      type: object
+      properties:
+        version: {type: string}
+        attestationStatement: {type: string}
+        penalty: {type: string}
+        text: {type: string, description: Markdown.}
+    GameTemplateManifest:
+      type: object
+      description: >-
+        template.json of a game_template archive (format 1). The archive is a Lumina project folder, optionally under
+        one top-level folder (no leading dot) that names the install folder templates/<Folder>/: template.json and/or
+        exactly one <source>.lmproject (every root .lmproject must parse and have project_name), a file under
+        contents/ (levels and assets), optionally lib/, pubspec.yaml and a thumbnail. Files under android/ ios/
+        linux/ macos/ windows/ web/ build/ at the root, or any .dart_tool/, are refused. In pubspec.yaml, lumina may be
+        a block-style path dependency under dependencies (Lumina Studio repoints it at the local engine); any other
+        path dependency must be a relative path to a vendored package whose pubspec.yaml is in the archive, and a
+        vendored package cannot depend on lumina by path.
+      required: [title]
+      properties:
+        format: {type: integer, enum: [1], description: Optional; 1 when absent.}
+        title: {type: string, minLength: 1}
+        description: {type: string}
+        engine_version: {type: string, example: 0.0.1}
+        thumbnail: {type: string, description: 'Template-relative .png/.jpg/.jpeg/.webp that must be in the archive.'}
+        publisher: {type: string}
+        version: {type: string}
+    GameTemplateProblem:
+      type: object
+      description: One reason a game_template archive was refused (422 invalid_template).
+      properties:
+        code:
+          type: string
+          enum: [top_folder_invalid, excluded_path, missing_contents, no_manifest, manifest_invalid, manifest_no_title,
+            multiple_projects, project_invalid, thumbnail_missing, pubspec_invalid, path_dependency]
+        message: {type: string}
+        path: {type: string, description: The offending archive path (with the top-level folder), when there is one.}
+    PluginPackage:
+      type: object
+      description: >-
+        What a plugin package declares, read from its root <name>.lmplugin manifest (optional single top
+        folder, named <name>), its root LICENSE / COPYING text and its changelog. The optional manifest keys
+        "license" (an allow-listed SPDX id, or one content AND one code license) and "changelog" (package-relative
+        path; default a root CHANGELOG.md) are read by the marketplace only.
+      properties:
+        name: {type: string, example: lumina_plugin_pcg}
+        friendlyName: {type: string, example: Procedural Content Generation}
+        title: {type: string, description: friendlyName, else name.}
+        version: {type: string, example: 0.1.0, description: 'The version this upload publishes as (X.Y.Z).'}
+        description: {type: string}
+        category: {type: string, example: Procedural, description: The plugin's own category.}
+        authors: {type: array, items: {type: string}}
+        engineVersionConstraint: {type: string, example: '>=0.0.1 <1.0.0'}
+        minEngineVersion: {type: string, example: 0.0.1}
+        tags: {type: array, items: {type: string}, example: [procedural, plugin]}
+        manifestPath: {type: string, example: lumina_plugin_pcg/lumina_plugin_pcg.lmplugin}
+        topFolder: {type: string}
+        license:
+          type: object
+          description: The declared license; absent when the publisher picks.
+          properties:
+            content: {type: string}
+            code: {type: string}
+            source: {type: string, enum: [manifest, license_file]}
+            path: {type: string}
+        licenseFile: {type: string}
+        licenseFileVerdict: {type: string, enum: [free, not_free, unrecognised]}
+        changelogPath: {type: string}
+        changelog: {type: string, description: The changelog text (capped at 20000 characters).}
+        releaseNotes: {type: string, description: "The changelog section of version."}
+    PluginPackageProblem:
+      type: object
+      description: One reason a plugin archive was refused (422 invalid_plugin).
+      properties:
+        code:
+          type: string
+          enum: [no_manifest, multiple_manifests, manifest_invalid, name_invalid, name_mismatch, top_folder_mismatch,
+            version_invalid, engine_version_invalid, license_unknown, license_not_free, license_conflict,
+            changelog_missing]
+        message: {type: string}
+        path: {type: string}
+  responses:
+    Error:
+      description: An error envelope.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Error'}
+
+paths:
+  /api/v1/health:
+    get:
+      tags: [catalogue]
+      summary: Liveness check
+      responses: {'200': {description: OK}}
+
+  /api/v1/auth/signup:
+    post:
+      tags: [accounts]
+      summary: Create an account
+      description: >-
+        Body {email, username, password (≥ 10 chars), displayName?}. Passwords are stored as argon2id hashes.
+        Returns tokens and sets the lm_refresh cookie. Rate-limited per IP.
+      responses:
+        '201': {description: Signed up, content: {application/json: {schema: {$ref: '#/components/schemas/AuthSession'}}}}
+        '409': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+        '429': {$ref: '#/components/responses/Error'}
+  /api/v1/auth/login:
+    post:
+      tags: [accounts]
+      summary: Log in with email or username
+      description: Body {login, password}. 10 failed attempts per minute per IP or per login → 429 rate_limited with Retry-After.
+      responses:
+        '200': {description: Logged in, content: {application/json: {schema: {$ref: '#/components/schemas/AuthSession'}}}}
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '429': {$ref: '#/components/responses/Error'}
+  /api/v1/auth/refresh:
+    post:
+      tags: [accounts]
+      summary: Rotate the refresh token
+      description: Body {refreshToken?}; without it the lm_refresh cookie is used. The old refresh token stops working.
+      responses:
+        '200': {description: New tokens, content: {application/json: {schema: {$ref: '#/components/schemas/AuthSession'}}}}
+        '401': {$ref: '#/components/responses/Error'}
+  /api/v1/auth/logout:
+    post:
+      tags: [accounts]
+      summary: Revoke the session
+      description: Revokes the session of the bearer token and/or the given refresh token (or cookie); its access tokens stop working immediately.
+      responses: {'204': {description: Logged out}}
+  /api/v1/me:
+    get:
+      tags: [accounts]
+      summary: The caller's account
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}
+        '401': {$ref: '#/components/responses/Error'}
+    patch:
+      tags: [accounts]
+      summary: Update the profile
+      description: Body {displayName}.
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}
+  /api/v1/me/avatar:
+    post:
+      tags: [accounts]
+      summary: Upload an avatar
+      description: Raw PNG/JPEG/WebP body (≤ 8 MB).
+      security: [{bearerAuth: []}]
+      requestBody: {content: {image/png: {}, image/jpeg: {}, image/webp: {}}}
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}
+        '422': {$ref: '#/components/responses/Error'}
+  /api/v1/me/password:
+    post:
+      tags: [accounts]
+      summary: Change the password
+      description: Body {currentPassword, newPassword}. Revokes every other session.
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: Changed}
+        '401': {$ref: '#/components/responses/Error'}
+  /api/v1/me/listings:
+    get:
+      tags: [publishing]
+      summary: The caller's listings in every status
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: '{items: Listing[]}'}}
+  /api/v1/users/{username}:
+    parameters: [{$ref: '#/components/parameters/Username'}]
+    get:
+      tags: [catalogue]
+      summary: A publisher's public profile and published listings
+      responses:
+        '200': {description: '{publisher, joinedAt, listings}'}
+        '404': {$ref: '#/components/responses/Error'}
+
+  /api/v1/categories:
+    get:
+      tags: [catalogue]
+      summary: Listing categories with their install kind, base license kinds and upload type
+      responses: {'200': {description: '{items}'}}
+  /api/v1/licenses:
+    get:
+      tags: [catalogue]
+      summary: The free-license allow-list (content and code)
+      responses: {'200': {description: '{items: License[]}'}}
+  /api/v1/licenses/{id}:
+    parameters: [{name: id, in: path, required: true, schema: {type: string}}]
+    get:
+      tags: [catalogue]
+      summary: One license with its text link
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/License'}}}}
+        '404': {$ref: '#/components/responses/Error'}
+  /api/v1/terms:
+    get:
+      tags: [catalogue]
+      summary: Publishing terms, the attestation statement and the penalty clause
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/Terms'}}}}
+  /api/v1/media/{sha256}:
+    parameters: [{name: sha256, in: path, required: true, schema: {type: string}}]
+    get:
+      tags: [catalogue]
+      summary: A screenshot or avatar image
+      responses: {'200': {description: The image}, '404': {$ref: '#/components/responses/Error'}}
+
+  /api/v1/listings:
+    get:
+      tags: [listings]
+      summary: Search and filter published listings
+      description: >-
+        Full-text search (FTS5, prefix + stemming) over title, description and tags. Sort defaults to relevance
+        with q, newest without.
+      parameters:
+        - {name: q, in: query, schema: {type: string}}
+        - {name: category, in: query, schema: {type: string}}
+        - {name: licenseKind, in: query, schema: {type: string, enum: [content, code]}}
+        - {name: license, in: query, schema: {type: string}}
+        - {name: engineVersion, in: query, description: Listings whose minimum engine version is ≤ this., schema: {type: string}}
+        - {name: free, in: query, schema: {type: boolean}}
+        - {name: publisher, in: query, description: Username., schema: {type: string}}
+        - {name: featured, in: query, schema: {type: boolean}}
+        - {name: sort, in: query, schema: {type: string, enum: [relevance, newest, downloads, name]}}
+        - {name: page, in: query, schema: {type: integer, default: 1}}
+        - {name: pageSize, in: query, schema: {type: integer, default: 24, maximum: 100}}
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/ListingPage'}}}}
+        '422': {$ref: '#/components/responses/Error'}
+    post:
+      tags: [publishing]
+      summary: Create a draft listing
+      description: >-
+        Body {category, title, description (Markdown), tags, engineVersion, priceCents, currency}. priceCents other
+        than 0 → 422 price_not_supported (free only for now).
+      security: [{bearerAuth: []}]
+      responses:
+        '201': {description: Created, content: {application/json: {schema: {$ref: '#/components/schemas/Listing'}}}}
+        '422': {$ref: '#/components/responses/Error'}
+  /api/v1/listings/{id}:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    get:
+      tags: [listings]
+      summary: A listing page (by id or slug) with every version
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/Listing'}}}}
+        '404': {$ref: '#/components/responses/Error'}
+    patch:
+      tags: [publishing]
+      summary: Edit listing metadata (publisher only)
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/Listing'}}}}
+        '403': {$ref: '#/components/responses/Error'}
+  /api/v1/listings/{id}/screenshots:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [publishing]
+      summary: Add a screenshot (raw PNG/JPEG/WebP body, up to 8 per listing)
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/Listing'}}}}
+  /api/v1/listings/{id}/screenshots/{index}:
+    parameters:
+      - {$ref: '#/components/parameters/ListingId'}
+      - {name: index, in: path, required: true, schema: {type: integer}}
+    delete:
+      tags: [publishing]
+      summary: Remove a screenshot
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/Listing'}}}}
+  /api/v1/listings/{id}/unlist:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [publishing]
+      summary: The publisher hides their listing
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: OK}}
+  /api/v1/listings/{id}/relist:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [publishing]
+      summary: The publisher lists it again (not after a moderator unlist)
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: OK}, '403': {$ref: '#/components/responses/Error'}}
+  /api/v1/uploads:
+    post:
+      tags: [publishing]
+      summary: Upload a version archive (.zip) or theme (.json)
+      description: >-
+        Raw body; ?fileName=… (or X-File-Name). Validated before it is stored: zip-slip paths (.., absolute, drive
+        letters, backslashes), symlinks, disallowed extensions and zip bombs → 422 invalid_archive; over the size
+        limit → 413. The response lists the files and the license kinds they need. With ?category= (the listing's)
+        the category's archive rules run too, with the errors publishing would give: a theme is .json, the rest a
+        .zip (422 invalid_archive), and a game_template follows the game template format (422 invalid_template,
+        see GameTemplateManifest); a plugin is checked as a plugin package (422 invalid_plugin, see
+        PluginPackageProblem) and the response carries what it declares (plugin).
+      security: [{bearerAuth: []}]
+      parameters:
+        - {name: fileName, in: query, required: true, schema: {type: string}}
+        - name: category
+          in: query
+          required: false
+          description: The listing's category; unknown → 422 validation_failed.
+          schema: {type: string, enum: [model, blueprint, material, texture, sound, animation, game_template, plugin, theme]}
+      requestBody: {content: {application/zip: {}, application/json: {}}}
+      responses:
+        '201': {description: Stored, content: {application/json: {schema: {$ref: '#/components/schemas/Upload'}}}}
+        '413': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+  /api/v1/listings/{id}/versions:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [publishing]
+      summary: Publish a version
+      description: >-
+        Body {version, uploadId, contentLicense?, codeLicense?, releaseNotes?, engineVersion?, attestation:
+        {accepted: true, termsVersion}}. Needs one allow-listed license per kind the category and files require
+        (422 license_required / license_unknown / license_wrong_kind) and the ownership attestation against the
+        current terms (422 attestation_required). The attestation is stored immutably. A game_template archive must
+        follow the game template format (GameTemplateManifest), else 422 invalid_template with details {problem,
+        path, problems: [GameTemplateProblem]}. A plugin archive must be a plugin package (422 invalid_plugin with details
+        {problem, path, problems: [PluginPackageProblem]}); its version must be the manifest's (422 version_mismatch)
+        and a license the package declares cannot be replaced (422 license_mismatch). Empty release notes default to
+        the changelog section of the version, an absent engineVersion to the manifest's lower bound.
+      security: [{bearerAuth: []}]
+      responses:
+        '201': {description: Published, content: {application/json: {schema: {$ref: '#/components/schemas/Version'}}}}
+        '409': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+  /api/v1/listings/{id}/versions/{version}:
+    parameters: [{$ref: '#/components/parameters/ListingId'}, {$ref: '#/components/parameters/Version'}]
+    get:
+      tags: [listings]
+      summary: One version
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/Version'}}}}
+  /api/v1/listings/{id}/versions/{version}/preview.glb:
+    parameters: [{$ref: '#/components/parameters/ListingId'}, {$ref: '#/components/parameters/Version'}]
+    get:
+      tags: [listings]
+      summary: The version's preview model for the listing page's 3D view
+      description: >-
+        Public (no library entry needed, not counted as a download); the listing's visibility applies. A self-contained
+        glTF binary with ETag (its SHA-256), X-Content-SHA256 and Cache-Control public, max-age=86400.
+      responses:
+        '200': {description: The preview, content: {model/gltf-binary: {schema: {type: string, format: binary}}}}
+        '304': {description: Not modified (If-None-Match matched the ETag).}
+        '404': {$ref: '#/components/responses/Error'}
+  /api/v1/listings/{id}/versions/{version}/manifest:
+    parameters: [{$ref: '#/components/parameters/ListingId'}, {$ref: '#/components/parameters/Version'}]
+    get:
+      tags: [library]
+      summary: The install manifest (files + target paths) Lumina Studio installs from
+      description: Requires the listing in the caller's library (403 not_in_library), or being its publisher / a moderator.
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/InstallManifest'}}}}
+        '403': {$ref: '#/components/responses/Error'}
+  /api/v1/listings/{id}/versions/{version}/download:
+    parameters: [{$ref: '#/components/parameters/ListingId'}, {$ref: '#/components/parameters/Version'}]
+    get:
+      tags: [library]
+      summary: Download the version archive (counts a download)
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: The exact bytes uploaded; X-Content-SHA256 header.}
+        '403': {$ref: '#/components/responses/Error'}
+  /api/v1/listings/{id}/versions/{version}/files/{path}:
+    parameters:
+      - {$ref: '#/components/parameters/ListingId'}
+      - {$ref: '#/components/parameters/Version'}
+      - {name: path, in: path, required: true, description: A file path from the manifest (may contain slashes)., schema: {type: string}}
+    get:
+      tags: [library]
+      summary: Download one file of a version
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: The file}, '404': {$ref: '#/components/responses/Error'}}
+  /api/v1/listings/{id}/get:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [library]
+      summary: Get (Free) — add the listing to the caller's library
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/LibraryEntry'}}}}
+  /api/v1/library:
+    get:
+      tags: [library]
+      summary: The caller's library
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: '{items: LibraryEntry[]}'}}
+
+  /api/v1/listings/{id}/reports:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [moderation]
+      summary: Report a listing
+      description: Body {reason, details}.
+      security: [{bearerAuth: []}]
+      responses:
+        '201': {description: Reported, content: {application/json: {schema: {$ref: '#/components/schemas/Report'}}}}
+  /api/v1/moderation/reports:
+    get:
+      tags: [moderation]
+      summary: The report queue (moderators)
+      parameters: [{name: status, in: query, schema: {type: string, enum: [open, dismissed, actioned]}}]
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: '{items: Report[]}'}, '403': {$ref: '#/components/responses/Error'}}
+  /api/v1/moderation/reports/{id}/resolve:
+    parameters: [{name: id, in: path, required: true, schema: {type: string}}]
+    post:
+      tags: [moderation]
+      summary: Resolve a report
+      description: Body {action (dismiss | unlist), note}.
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/Report'}}}}
+  /api/v1/moderation/listings/{id}/unlist:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [moderation]
+      summary: Unlist a listing (moderators)
+      description: Body {reason}. Hidden from search and listing pages; library holders can no longer download it.
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: OK}}
+  /api/v1/moderation/listings/{id}/restore:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [moderation]
+      summary: Restore an unlisted listing (moderators)
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: OK}}
+  /api/v1/moderation/listings/{id}/feature:
+    parameters: [{$ref: '#/components/parameters/ListingId'}]
+    post:
+      tags: [moderation]
+      summary: Feature or unfeature a listing on the home page
+      description: Body {featured}.
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: OK}}
+  /api/v1/moderation/users/{username}/suspend:
+    parameters: [{$ref: '#/components/parameters/Username'}]
+    post:
+      tags: [moderation]
+      summary: Suspend a publisher (the penalty clause)
+      description: Body {reason}. Unlists all of their listings, revokes every session and token; each step is audited.
+      security: [{bearerAuth: []}]
+      responses:
+        '200': {description: OK, content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}
+  /api/v1/moderation/users/{username}/unsuspend:
+    parameters: [{$ref: '#/components/parameters/Username'}]
+    post:
+      tags: [moderation]
+      summary: Lift a suspension (listings stay unlisted until restored)
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: OK}}
+  /api/v1/moderation/audit:
+    get:
+      tags: [moderation]
+      summary: The append-only audit log, newest first
+      parameters: [{name: limit, in: query, schema: {type: integer, default: 100}}]
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: '{items: AuditEntry[]}'}}
+  /api/v1/admin/users/{username}/role:
+    parameters: [{$ref: '#/components/parameters/Username'}]
+    post:
+      tags: [moderation]
+      summary: Set a user's role (admins)
+      description: Body {role (user | moderator | admin)}.
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: OK}}

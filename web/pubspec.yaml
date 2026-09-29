@@ -1,0 +1,58 @@
+name: lumina_marketplace_web
+description: The Lumina Marketplace web front end (Flutter web + shadcn_flutter).
+publish_to: none
+resolution: workspace
+version: 0.1.0
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  # The same version as lumina_ui (lumina_ui/pubspec.lock).
+  shadcn_flutter: 0.0.53
+  lumina_marketplace_shared:
+    path: ../shared
+  go_router: ^18.0.1
+  http: ^1.6.0
+  markdown: ^7.3.1
+  web: ^1.1.1
+  # The listing page's 3D view runs the Lumina web runtime on
+  # flutter_filament's WebAssembly module (loaded lazily, see
+  # lib/src/features/listing/model_viewer/). Both come from the engine repo
+  # (LuminaGame/lumina); the (gitignored) root pubspec_overrides.yaml points
+  # them at a local checkout next to this one (../lumina).
+  lumina:
+    git:
+      url: https://github.com/LuminaGame/lumina.git
+      path: lumina
+  flutter_filament:
+    git:
+      url: https://github.com/LuminaGame/lumina.git
+      path: flutter_filament
+  vector_math: ^2.1.4
+  crypto: ^3.0.7
+
+dev_dependencies:
+  archive: ^4.3.0
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+  image: ^4.10.1
+  lumina_marketplace_server:
+    path: ../server
+  # The shared smoke-test evidence and report (tools repo); the root
+  # pubspec_overrides.yaml can point it at a local checkout.
+  lumina_smoke:
+    git:
+      url: https://github.com/LuminaGame/tools.git
+      path: lumina_smoke
+  puppeteer: ^3.26.0
+  test: ^1.31.1
+
+flutter:
+  assets:
+    - assets/

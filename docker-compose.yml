@@ -1,0 +1,25 @@
+# One command to run the marketplace locally (API + built web front end):
+#   cp .env.example .env        # then set MARKETPLACE_JWT_SECRET (openssl rand -hex 32)
+#   (cd web && flutter build web --release)
+#   docker compose up --build
+# Every secret comes from the environment / the gitignored .env; nothing is
+# committed. Without Docker, see README.md ("Run it locally").
+services:
+  marketplace:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    command: ["--seed"]
+    ports:
+      - "127.0.0.1:8787:8787"
+    environment:
+      MARKETPLACE_JWT_SECRET: ${MARKETPLACE_JWT_SECRET:?set MARKETPLACE_JWT_SECRET (in .env, see .env.example) to 32+ random characters}
+      MARKETPLACE_BASE_URL: http://127.0.0.1:8787
+      MARKETPLACE_WEB_DIR: /web
+      MARKETPLACE_TEST_ASSETS: /test-assets
+    volumes:
+      - marketplace-data:/data
+      - ./web/build/web:/web:ro
+      - ${LUMINA_TEST_ASSETS:-./test-assets}:/test-assets:ro
+volumes:
+  marketplace-data:

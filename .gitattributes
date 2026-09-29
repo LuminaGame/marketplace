@@ -1,0 +1,7 @@
+# Keep LF in every checkout (the game template fixture and the pubspec
+# checks compare text byte for byte).
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.glb binary
+*.wasm binary

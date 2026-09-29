@@ -1,0 +1,7 @@
+{
+  "format": 1,
+  "title": "Arena",
+  "description": "A first-person starter arena: a floor, a player start and the Arena game mode.",
+  "engine_version": "0.0.1",
+  "thumbnail": "thumbnail.png"
+}

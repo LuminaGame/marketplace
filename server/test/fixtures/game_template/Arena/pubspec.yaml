@@ -1,0 +1,35 @@
+name: arena
+description: "Arena, a Lumina game template."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+environment:
+  sdk: ^3.13.0
+dependencies:
+  shadcn_flutter: 0.0.53
+  lumina:
+    git:
+      url: https://github.com/LuminaGame/lumina.git
+      path: lumina
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+flutter:
+  assets:
+    - contents/
+    - contents/meshes/static/
+    - contents/meshes/skeletal/
+    - contents/materials/
+    - contents/textures/
+    - contents/animations/
+    - contents/audio/
+    - contents/particles/
+    - contents/levels/
+    - contents/ui/
+    - contents/landscapes/
+    - contents/blueprints/
+    - contents/widgets/
+  uses-material-design: true

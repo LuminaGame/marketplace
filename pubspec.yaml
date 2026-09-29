@@ -1,0 +1,67 @@
+name: lumina_marketplace_workspace
+description: The Lumina Marketplace monorepo (server, shared, web) as one Dart pub workspace, managed with Melos.
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+workspace:
+  - server
+  - shared
+  - web
+
+dev_dependencies:
+  melos: ^7.0.0
+
+melos:
+  scripts:
+    analyze:
+      description: Analyze every package (dart analyze also covers the Flutter web package).
+      run: dart analyze .
+      exec:
+        concurrency: 1
+    test:
+      description: Run the tests of every package (test:dart, then test:flutter).
+      steps:
+        - test:dart
+        - test:flutter
+    test:dart:
+      description: Unit tests of the pure Dart packages (server, shared) with dart test.
+      run: dart test
+      exec:
+        concurrency: 1
+      packageFilters:
+        flutter: false
+        dirExists: test
+    test:flutter:
+      description: Widget tests of the Flutter packages (web) with flutter test.
+      run: flutter test
+      exec:
+        concurrency: 1
+      packageFilters:
+        flutter: true
+        dirExists: test
+    format:
+      description: Format every package's Dart code (120 columns).
+      run: dart format --line-length 120 .
+      exec:
+        concurrency: 1
+    format:check:
+      description: Fail if any package's Dart code is not formatted (CI).
+      run: dart format --line-length 120 --output none --set-exit-if-changed .
+      exec:
+        concurrency: 1
+    serve:
+      description: Run the marketplace API locally with the sample listings (needs MARKETPLACE_JWT_SECRET, see .env.example).
+      run: dart run bin/server.dart --seed
+      exec:
+        concurrency: 1
+      packageFilters:
+        scope: lumina_marketplace_server
+    build:web:
+      description: Build the Flutter web front end into web/build/web.
+      run: flutter build web --release
+      exec:
+        concurrency: 1
+      packageFilters:
+        scope: lumina_marketplace_web
