@@ -374,7 +374,8 @@ class _ListingPageState extends State<ListingPage> {
   void _openReport(BuildContext context) {
     showOverlay(
       context,
-      DialogConfiguration(builder: (dialogContext) => _ReportDialog(onSubmit: _vm.report)),
+      const DialogConfiguration(),
+      builder: (dialogContext) => _ReportDialog(onSubmit: _vm.report),
     );
   }
 }

@@ -173,7 +173,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
   }
 
   void _edit(BuildContext context, Listing l) {
-    showOverlay(context, DialogConfiguration(builder: (dialogContext) => _EditDialog(listing: l, vm: _vm)));
+    showOverlay(context, const DialogConfiguration(), builder: (dialogContext) => _EditDialog(listing: l, vm: _vm));
   }
 }
 
