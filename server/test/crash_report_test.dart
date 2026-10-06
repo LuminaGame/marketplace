@@ -56,6 +56,30 @@ void main() {
     expect(stored.containsKey('ip'), isFalse, reason: 'only the hashed address is kept');
   });
 
+  test('a plugin process crash is stored with its kind, plugin and exit code', () async {
+    final client = server.client();
+    final receipt = await client.submitCrashReport({
+      'kind': 'plugin_crash',
+      'error': 'lumina_plugin_kimodo stopped: exited with code -1073741819',
+      'plugin': 'lumina_plugin_kimodo',
+      'exitCode': -1073741819,
+      'logTail': ['[22:00:01] [INFO] [lumina_plugin_kimodo] generating'],
+    });
+    final file = Directory('${server.root.path}/storage/crash-reports')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .singleWhere((f) => f.path.endsWith('${receipt.id}.json'));
+    final stored = jsonDecode(file.readAsStringSync()) as Map<String, Object?>;
+    final report = (stored['report'] as Map).cast<String, Object?>();
+    expect(report['kind'], 'plugin_crash');
+    expect(report['plugin'], 'lumina_plugin_kimodo');
+    expect(report['exitCode'], -1073741819);
+    await expectLater(
+      client.submitCrashReport({'error': 'x', 'kind': 'plugin_crash', 'exitCode': 'three'}),
+      throwsA(isA<Exception>()),
+    );
+  });
+
   test('the error is required, the kind is checked and long fields are refused', () async {
     final client = server.client();
     await expectLater(

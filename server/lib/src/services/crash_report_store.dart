@@ -25,9 +25,10 @@ class CrashReportStore {
   static const int maxLogLineChars = 2000;
   static const int maxFieldChars = 512;
 
-  /// The report kinds the editor sends: an uncaught error while running, or
-  /// a previous session that ended without closing.
-  static const Set<String> kinds = {'uncaught', 'previous_run'};
+  /// The report kinds the editor sends: an uncaught error while running, a
+  /// previous session that ended without closing, or a plugin running in its
+  /// own process that died (with its exit code).
+  static const Set<String> kinds = {'uncaught', 'previous_run', 'plugin_crash'};
 
   static const Set<String> _shortFields = {
     'reportId',
@@ -98,6 +99,11 @@ class CrashReportStore {
     for (final key in _shortFields) {
       final v = text(key, maxFieldChars);
       if (v.isNotEmpty) out[key] = v;
+    }
+    final exitCode = body['exitCode'];
+    if (exitCode != null) {
+      if (exitCode is! int) throw ApiException.validation('exitCode must be an integer.', {'field': 'exitCode'});
+      out['exitCode'] = exitCode;
     }
     final log = body['logTail'];
     if (log != null) {

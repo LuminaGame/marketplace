@@ -240,7 +240,7 @@ class MarketplaceClient {
   Future<Terms> terms() async => Terms.fromJson(await _json('GET', '/terms'));
 
   /// Sends a Lumina Studio crash report (no account needed). [report] holds
-  /// `error` (required), `kind` (`uncaught` or `previous_run`), `stackTrace`,
+  /// `error` (required), `kind` (`uncaught`, `previous_run` or `plugin_crash`; the last with an integer `exitCode`), `stackTrace`,
   /// `description`, `email`, `release`, `commit`, `editor`, `platform`,
   /// `osVersion`, `gpu`, `filament`, `project`, `logTail` (strings),
   /// `reportId` and `createdAt`; the server keeps it as a file.
