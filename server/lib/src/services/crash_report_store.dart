@@ -40,6 +40,7 @@ class CrashReportStore {
     'gpu',
     'filament',
     'project',
+    'plugin',
   };
 
   Directory get root => Directory('$storageDir/crash-reports');

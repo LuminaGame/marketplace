@@ -29,6 +29,7 @@ void main() {
       'osVersion': 'Windows 11 Pro 10.0.26200',
       'gpu': 'NVIDIA RTX PRO 2000',
       'filament': '1.77.2',
+      'plugin': 'lumina_plugin_miniai',
       'logTail': ['[12:00:01] [INFO] [Engine] ready', '[12:00:02] [ERROR] [Viewport] device lost'],
       'reportId': 'local-1',
       'createdAt': '2026-10-06T12:00:03.000Z',
@@ -48,6 +49,7 @@ void main() {
     final report = stored['report'] as Map<String, Object?>;
     expect(report['error'], 'StateError: Bad state: No element');
     expect(report['kind'], 'uncaught');
+    expect(report['plugin'], 'lumina_plugin_miniai');
     expect(report['email'], 'dev@example.test');
     expect(report['gpu'], 'NVIDIA RTX PRO 2000');
     expect((report['logTail'] as List).length, 2);
