@@ -239,6 +239,14 @@ class MarketplaceClient {
 
   Future<Terms> terms() async => Terms.fromJson(await _json('GET', '/terms'));
 
+  /// Sends a Lumina Studio crash report (no account needed). [report] holds
+  /// `error` (required), `kind` (`uncaught` or `previous_run`), `stackTrace`,
+  /// `description`, `email`, `release`, `commit`, `editor`, `platform`,
+  /// `osVersion`, `gpu`, `filament`, `project`, `logTail` (strings),
+  /// `reportId` and `createdAt`; the server keeps it as a file.
+  Future<CrashReportReceipt> submitCrashReport(Map<String, Object?> report) async =>
+      CrashReportReceipt.fromJson(await _json('POST', '/crash-reports', json: report));
+
   Future<ResultPage<Listing>> search(SearchQuery query) async => ResultPage.fromJson(
         await _json('GET', '/listings', query: query.toQueryParameters()),
         Listing.fromJson,

@@ -196,6 +196,11 @@ components:
       properties:
         listing: {$ref: '#/components/schemas/Listing'}
         acquiredAt: {type: string, format: date-time}
+    CrashReportReceipt:
+      type: object
+      properties:
+        id: {type: string}
+        receivedAt: {type: string, format: date-time}
     Report:
       type: object
       properties:
@@ -620,6 +625,19 @@ paths:
       security: [{bearerAuth: []}]
       responses: {'200': {description: '{items: LibraryEntry[]}'}}
 
+  /api/v1/crash-reports:
+    post:
+      tags: [moderation]
+      summary: File a Lumina Studio crash report
+      description: >-
+        Body {error (required), kind (uncaught | previous_run), stackTrace, description, email, release, commit,
+        editor, platform, osVersion, gpu, filament, project, logTail (string[] ≤ 400 lines), reportId, createdAt}.
+        No account needed; limited per IP. Stored as a JSON file under the storage folder (crash-reports/).
+      responses:
+        '201': {description: Filed, content: {application/json: {schema: {$ref: '#/components/schemas/CrashReportReceipt'}}}}
+        '413': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+        '429': {$ref: '#/components/responses/Error'}
   /api/v1/listings/{id}/reports:
     parameters: [{$ref: '#/components/parameters/ListingId'}]
     post:

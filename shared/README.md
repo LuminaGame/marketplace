@@ -46,6 +46,10 @@ for (final file in manifest.files) {
 
 The client also covers sign-up, sessions (`refresh`, `restoreSession`, `logOut`), profiles, publishing (`createListing`, `upload`, `publishVersion`, screenshots, `unlist` / `relist`), the library, reports and the moderation endpoints. API errors are thrown as `MarketplaceException`, carrying the server's error `code`.
 
+## Crash reports
+
+`MarketplaceClient.submitCrashReport(Map report)` posts a Lumina Studio crash report to `POST /api/v1/crash-reports` without signing in and returns a `CrashReportReceipt` (`id`, `receivedAt`). The map's keys are listed on the method.
+
 ## Licenses
 
 | Kind | Allowed licenses |

@@ -7,6 +7,7 @@ import 'package:shelf/shelf.dart';
 import '../errors.dart';
 import '../repositories/records.dart';
 import '../services/auth_service.dart';
+import '../services/crash_report_store.dart';
 import '../services/services.dart';
 import '../terms.dart';
 import 'middleware.dart';
@@ -19,11 +20,17 @@ const _maxJsonBytes = 1024 * 1024;
 class ApiContext {
   ApiContext(this.services)
       : loginFailures = RateLimiter(services.config.loginFailuresPerMinute),
-        authRequests = RateLimiter(services.config.authRequestsPerMinute);
+        authRequests = RateLimiter(services.config.authRequestsPerMinute),
+        crashReports = RateLimiter(services.config.crashReportsPerMinute),
+        crashReportStore = CrashReportStore(services.config.storageDir);
 
   final MarketplaceServices services;
   final RateLimiter loginFailures;
   final RateLimiter authRequests;
+
+  /// Per-IP limit on crash reports (the editor sends one per crash).
+  final RateLimiter crashReports;
+  final CrashReportStore crashReportStore;
 
   String clientIp(Request request) {
     if (services.config.trustProxy) {
@@ -305,6 +312,16 @@ final List<ApiRoute<ApiContext>> apiRoutes = [
   ApiRoute('GET', '/library', (c, r, p) => jsonResponse({
         'items': [for (final e in c.services.listingService.libraryOf(c.requireAuth(r))) e.toJson()],
       })),
+
+  // --- Crash reports --------------------------------------------------------------------
+  // Lumina Studio's crash report screen posts here, with or without an account.
+  ApiRoute('POST', '/crash-reports', (c, r, p) async {
+    final key = 'crash:${c.clientIp(r)}';
+    if (!c.crashReports.tryAcquire(key)) throw rateLimited(c.crashReports.retryAfter(key));
+    final receipt = await c.crashReportStore.store(await readJson(r), c.client(r));
+    c.services.log.info('crash report stored', {'id': receipt.id, 'file': receipt.file.path});
+    return jsonResponse(receipt.toJson(), status: 201);
+  }),
 
   // --- Reports & moderation -----------------------------------------------------------
   ApiRoute('POST', '/listings/<id>/reports', (c, r, p) async {

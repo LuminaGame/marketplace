@@ -46,6 +46,10 @@ for (final file in manifest.files) {
 
 Client ayrıca kayıt, session'lar (`refresh`, `restoreSession`, `logOut`), profiller, publishing (`createListing`, `upload`, `publishVersion`, screenshot'lar, `unlist` / `relist`), library, report'lar ve moderasyon endpoint'lerini de kapsar. API hataları, server'ın hata `code`'unu taşıyan `MarketplaceException` olarak fırlatılır.
 
+## Çökme raporları
+
+`MarketplaceClient.submitCrashReport(Map report)` bir Lumina Studio çökme raporunu oturum açmadan `POST /api/v1/crash-reports` ucuna gönderir ve `CrashReportReceipt` (`id`, `receivedAt`) döner. Haritanın anahtarları metodun üzerinde listelenir.
+
 ## Lisanslar
 
 | Tür | İzin verilen lisanslar |

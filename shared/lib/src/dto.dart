@@ -978,3 +978,17 @@ class PublisherProfile {
         listings: [for (final l in j['listings'] as List) Listing.fromJson(_map(l))],
       );
 }
+
+/// The answer to a crash report (`POST /crash-reports`): the id the server
+/// filed it under and when it arrived.
+class CrashReportReceipt {
+  const CrashReportReceipt({required this.id, required this.receivedAt});
+
+  final String id;
+  final DateTime receivedAt;
+
+  Map<String, Object?> toJson() => {'id': id, 'receivedAt': receivedAt.toIso8601String()};
+
+  factory CrashReportReceipt.fromJson(Map<String, Object?> j) =>
+      CrashReportReceipt(id: j['id'] as String, receivedAt: _date(j['receivedAt']));
+}
