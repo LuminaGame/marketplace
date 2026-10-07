@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:shelf/shelf.dart';
 
-import '../errors.dart';
+import 'package:lumina_marketplace_server/src/errors.dart';
 
 typedef RouteHandler<C> = FutureOr<Response> Function(C context, Request request, Map<String, String> params);
 

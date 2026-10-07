@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_filament/flutter_filament.dart' show FilamentWeb, SphericalHarmonics;
-import 'package:lumina/lumina_runtime.dart' as lm;
+import 'package:flutter_filament/filament.dart' show FilamentWeb, SphericalHarmonics;
+import 'package:lumina_widgets/lumina_game.dart' as lm;
 import 'package:vector_math/vector_math_64.dart';
 
-import 'orbit_camera.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/orbit_camera.dart';
 
 /// The 3D view's scene on the Lumina web runtime: a [lm.LuminaGame]
 /// whose world holds the preview model, a neutral studio (a light grey sky
@@ -57,6 +57,14 @@ class _PreviewViewport extends StatefulWidget {
 }
 
 class _PreviewViewportState extends State<_PreviewViewport> {
+  @override
+  void initState() {
+    super.initState();
+    // The engine's platform, asset bundle and video seams, as a game's
+    // launcher fills them.
+    lm.LuminaWidgets.ensureInitialized();
+  }
+
   late final _PreviewGame _game = _PreviewGame(
     glb: widget.glb,
     camera: widget.camera,
@@ -147,11 +155,11 @@ class _PreviewGame extends lm.LuminaGame {
     _ground.loaded.then((_) {}, onError: (Object e) => _fail(e));
 
     return lm.LuminaNodeGroup(children: [
-      lm.LuminaActor(key: const ValueKey('preview_sky'), root: sky),
-      lm.LuminaActor(key: const ValueKey('preview_key_light'), root: key),
-      lm.LuminaActor(key: const ValueKey('preview_ground'), root: _ground),
-      lm.LuminaActor(key: const ValueKey('preview_model'), root: _mesh),
-      lm.LuminaActor(key: const ValueKey('preview_camera'), root: _camera),
+      lm.LuminaActor(key: const lm.LuminaObjectKey('preview_sky'), root: sky),
+      lm.LuminaActor(key: const lm.LuminaObjectKey('preview_key_light'), root: key),
+      lm.LuminaActor(key: const lm.LuminaObjectKey('preview_ground'), root: _ground),
+      lm.LuminaActor(key: const lm.LuminaObjectKey('preview_model'), root: _mesh),
+      lm.LuminaActor(key: const lm.LuminaObjectKey('preview_camera'), root: _camera),
     ]);
   }
 

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 
-import '../util.dart';
+import 'package:lumina_marketplace_server/src/util.dart';
 
 /// A stored blob: its SHA-256 (the address) and size.
 class BlobRef {

@@ -41,7 +41,7 @@ flutter run -d chrome --web-hostname 127.0.0.1 --web-port 5000 \
 
 ## 3D görünüm
 
-Version'ın bir preview modeli varsa model listing sayfalarında **Images / 3D view** toggle'ı çıkar. 3D görünüm Lumina engine'ini tarayıcıda çalıştırır (flutter_filament'in WebGL2 WebAssembly modülü üzerinde `package:lumina/lumina_runtime.dart`) ve server'ın arşivden çıkardığı preview GLB'yi render eder: orbit için sürükleme, pan için sağ tık ya da Shift ile sürükleme, zoom için tekerlek, yeniden çerçevelemek için çift tık ya da **Reset view**, ve **Fullscreen**. Runtime deferred bir library'dir ve wasm modülü (`filament/flutter_filament.{js,wasm}`) yalnızca biri 3D görünümü açtığında yüklenir; server onu ETag ile `application/wasm` olarak servis eder.
+Version'ın bir preview modeli varsa model listing sayfalarında **Images / 3D view** toggle'ı çıkar. 3D görünüm Lumina engine'ini tarayıcıda çalıştırır (flutter_filament'in WebGL2 WebAssembly modülü üzerinde `package:lumina_widgets/lumina_game.dart`, yani engine runtime ve oyun widget'ı) ve server'ın arşivden çıkardığı preview GLB'yi render eder: orbit için sürükleme, pan için sağ tık ya da Shift ile sürükleme, zoom için tekerlek, yeniden çerçevelemek için çift tık ya da **Reset view**, ve **Fullscreen**. Runtime deferred bir library'dir ve wasm modülü (`filament/flutter_filament.{js,wasm}`) yalnızca biri 3D görünümü açtığında yüklenir; server onu ETag ile `application/wasm` olarak servis eder.
 
 ## Test'ler
 

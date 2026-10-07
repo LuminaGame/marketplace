@@ -144,6 +144,8 @@ melos run serve          # örnek listing'lerle API (MARKETPLACE_JWT_SECRET gere
 melos run build:web      # web/ içinde flutter build web --release
 ```
 
+Her paket `always_use_package_imports` lint'ini açar: bir dosya kendi paketindeki başka bir dosyayı göreli yolla değil, `package:` URI'siyle import eder (`package:lumina_marketplace_server/src/...`).
+
 Test'ler gerçek geçici SQLite veritabanları ve storage klasörleri, ephemeral port'larda gerçek server'lar ve `test-assets/` (ya da `LUMINA_TEST_ASSETS`) içindeki gerçek mesh'lerle çalışır; plugin publish test'leri `lumina_plugin_pcg`'yi `../plugins` altındaki plugins checkout'undan (ya da `LUMINA_PLUGINS_DIR`) okur.
 
 Kanıtları `build/smoke_artifacts/` altına yazılan smoke test'ler:

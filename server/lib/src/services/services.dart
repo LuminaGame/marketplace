@@ -1,17 +1,17 @@
 import 'package:sqlite3/sqlite3.dart';
 
-import '../config.dart';
-import '../db/database.dart';
-import '../log.dart';
-import '../repositories/repositories.dart';
-import '../repositories/sqlite_repositories.dart';
-import '../storage/blob_store.dart';
-import '../storage/zip_validator.dart';
-import '../util.dart';
-import 'auth_service.dart';
-import 'crypto.dart';
-import 'listing_service.dart';
-import 'moderation_service.dart';
+import 'package:lumina_marketplace_server/src/config.dart';
+import 'package:lumina_marketplace_server/src/db/database.dart';
+import 'package:lumina_marketplace_server/src/log.dart';
+import 'package:lumina_marketplace_server/src/repositories/repositories.dart';
+import 'package:lumina_marketplace_server/src/repositories/sqlite_repositories.dart';
+import 'package:lumina_marketplace_server/src/storage/blob_store.dart';
+import 'package:lumina_marketplace_server/src/storage/zip_validator.dart';
+import 'package:lumina_marketplace_server/src/util.dart';
+import 'package:lumina_marketplace_server/src/services/auth_service.dart';
+import 'package:lumina_marketplace_server/src/services/crypto.dart';
+import 'package:lumina_marketplace_server/src/services/listing_service.dart';
+import 'package:lumina_marketplace_server/src/services/moderation_service.dart';
 
 /// Every repository and service, wired from a [MarketplaceConfig]. The HTTP
 /// layer, the seed script and tests all go through this.

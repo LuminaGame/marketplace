@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:sqlite3/sqlite3.dart';
 
-import '../util.dart';
+import 'package:lumina_marketplace_server/src/util.dart';
 
 /// Opens (creating if needed) the SQLite database at [path] and applies every
 /// pending migration.

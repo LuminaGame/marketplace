@@ -3,9 +3,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import '../../../theme/marketplace_theme.dart';
-import 'model_viewer_controller.dart';
-import 'preview_runtime.dart';
+import 'package:lumina_marketplace_web/src/theme/marketplace_theme.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/model_viewer_controller.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/preview_runtime.dart';
 
 /// The listing page's 3D view: the Lumina viewport with mouse
 /// orbit / pan / zoom, an overlay toolbar (reset view, fullscreen), the

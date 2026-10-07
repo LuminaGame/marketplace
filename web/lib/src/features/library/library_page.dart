@@ -2,10 +2,10 @@ import 'package:go_router/go_router.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import '../../data/session.dart';
-import '../../platform/files.dart';
-import '../../theme/marketplace_theme.dart';
-import '../../widgets/common.dart';
+import 'package:lumina_marketplace_web/src/data/session.dart';
+import 'package:lumina_marketplace_web/src/platform/files.dart';
+import 'package:lumina_marketplace_web/src/theme/marketplace_theme.dart';
+import 'package:lumina_marketplace_web/src/widgets/common.dart';
 
 class LibraryViewModel extends ChangeNotifier {
   LibraryViewModel(this.client, this.saver);

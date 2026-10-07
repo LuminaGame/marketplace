@@ -1,6 +1,6 @@
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 
-import 'records.dart';
+import 'package:lumina_marketplace_server/src/repositories/records.dart';
 
 // The persistence seams. `sqlite_repositories.dart` implements them on SQLite;
 // a PostgreSQL implementation can replace it for hosting without touching the

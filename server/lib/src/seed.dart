@@ -5,11 +5,11 @@ import 'dart:isolate';
 import 'package:archive/archive.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 
-import 'repositories/records.dart';
-import 'services/auth_service.dart';
-import 'services/services.dart';
-import 'terms.dart';
-import 'util.dart';
+import 'package:lumina_marketplace_server/src/repositories/records.dart';
+import 'package:lumina_marketplace_server/src/services/auth_service.dart';
+import 'package:lumina_marketplace_server/src/services/services.dart';
+import 'package:lumina_marketplace_server/src/terms.dart';
+import 'package:lumina_marketplace_server/src/util.dart';
 
 /// What [seedSampleContent] created (or found, when run again).
 class SeedResult {

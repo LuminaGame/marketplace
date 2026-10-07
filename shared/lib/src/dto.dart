@@ -1,6 +1,6 @@
-import 'categories.dart';
-import 'licenses.dart';
-import 'plugin_package.dart';
+import 'package:lumina_marketplace_shared/src/categories.dart';
+import 'package:lumina_marketplace_shared/src/licenses.dart';
+import 'package:lumina_marketplace_shared/src/plugin_package.dart';
 
 // Every DTO here is what the API sends and receives as JSON. Timestamps are
 // ISO-8601 UTC strings on the wire; URLs are server-relative

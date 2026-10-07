@@ -3,13 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import '../../data/session.dart';
-import '../../platform/files.dart';
-import '../../theme/marketplace_theme.dart';
-import '../../widgets/common.dart';
-import '../../widgets/markdown_view.dart';
-import 'model_viewer/listing_model_viewer.dart';
-import 'model_viewer/model_viewer_controller.dart';
+import 'package:lumina_marketplace_web/src/data/session.dart';
+import 'package:lumina_marketplace_web/src/platform/files.dart';
+import 'package:lumina_marketplace_web/src/theme/marketplace_theme.dart';
+import 'package:lumina_marketplace_web/src/widgets/common.dart';
+import 'package:lumina_marketplace_web/src/widgets/markdown_view.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/listing_model_viewer.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/model_viewer_controller.dart';
 
 class ListingViewModel extends ChangeNotifier {
   ListingViewModel(this.client, this.saver, this.slug);

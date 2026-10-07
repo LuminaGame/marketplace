@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:cryptography/cryptography.dart' as c;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as j;
 
-import '../util.dart';
+import 'package:lumina_marketplace_server/src/util.dart';
 
 /// Argon2id password hashes in the PHC string format
 /// (`$argon2id$v=19$m=19456,t=2,p=1$<salt>$<hash>`), with the OWASP minimum

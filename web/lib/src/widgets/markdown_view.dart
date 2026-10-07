@@ -1,7 +1,7 @@
 import 'package:markdown/markdown.dart' as md;
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import '../theme/marketplace_theme.dart';
+import 'package:lumina_marketplace_web/src/theme/marketplace_theme.dart';
 
 /// Renders listing descriptions (Markdown) with shadcn typography: headings,
 /// paragraphs, emphasis, inline code, code blocks, lists, quotes and rules.

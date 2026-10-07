@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'files.dart';
+import 'package:lumina_marketplace_web/src/platform/files.dart';
 
 /// Outside the browser (widget tests, desktop runs) there is no file dialog;
 /// callers inject a [FileSource]. Saving writes into the system temp dir.

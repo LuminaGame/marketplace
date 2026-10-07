@@ -2,18 +2,18 @@ import 'package:go_router/go_router.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import 'data/session.dart';
-import 'features/auth/auth_pages.dart';
-import 'features/home/home_page.dart';
-import 'features/library/library_page.dart';
-import 'features/listing/listing_page.dart';
-import 'features/moderation/moderation_page.dart';
-import 'features/my_listings/my_listings_page.dart';
-import 'features/publish/publish_page.dart';
-import 'features/search/search_page.dart';
-import 'features/shell/app_shell.dart';
-import 'platform/files.dart';
-import 'theme/marketplace_theme.dart';
+import 'package:lumina_marketplace_web/src/data/session.dart';
+import 'package:lumina_marketplace_web/src/features/auth/auth_pages.dart';
+import 'package:lumina_marketplace_web/src/features/home/home_page.dart';
+import 'package:lumina_marketplace_web/src/features/library/library_page.dart';
+import 'package:lumina_marketplace_web/src/features/listing/listing_page.dart';
+import 'package:lumina_marketplace_web/src/features/moderation/moderation_page.dart';
+import 'package:lumina_marketplace_web/src/features/my_listings/my_listings_page.dart';
+import 'package:lumina_marketplace_web/src/features/publish/publish_page.dart';
+import 'package:lumina_marketplace_web/src/features/search/search_page.dart';
+import 'package:lumina_marketplace_web/src/features/shell/app_shell.dart';
+import 'package:lumina_marketplace_web/src/platform/files.dart';
+import 'package:lumina_marketplace_web/src/theme/marketplace_theme.dart';
 
 /// Pages that need a signed-in user; visiting one signed out goes to log-in
 /// and comes back after.

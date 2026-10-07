@@ -3,8 +3,8 @@ import 'package:flutter/services.dart' show TextInputAction;
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import '../../data/session.dart';
-import '../../theme/marketplace_theme.dart';
+import 'package:lumina_marketplace_web/src/data/session.dart';
+import 'package:lumina_marketplace_web/src/theme/marketplace_theme.dart';
 
 /// The frame around every page: the top bar (logo, search, navigation,
 /// account) over the routed page.

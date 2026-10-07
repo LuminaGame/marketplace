@@ -1,7 +1,7 @@
 import 'package:archive/archive.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 
-import '../errors.dart';
+import 'package:lumina_marketplace_server/src/errors.dart';
 
 /// Checks `plugin` archives against the Lumina plugin package format (
 /// the rules live in the shared package's [checkPluginPackage], so the web

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import '../platform/files.dart';
+import 'package:lumina_marketplace_web/src/platform/files.dart';
 
 /// The signed-in state of the app, over [MarketplaceClient]'s session. The
 /// access token lives in the client's memory only; in the browser the refresh

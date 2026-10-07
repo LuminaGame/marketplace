@@ -1,13 +1,13 @@
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 import 'package:sqlite3/sqlite3.dart' show Database;
 
-import '../db/database.dart';
-import '../errors.dart';
-import '../repositories/records.dart';
-import '../repositories/repositories.dart';
-import '../util.dart';
-import 'auth_service.dart';
-import 'listing_service.dart';
+import 'package:lumina_marketplace_server/src/db/database.dart';
+import 'package:lumina_marketplace_server/src/errors.dart';
+import 'package:lumina_marketplace_server/src/repositories/records.dart';
+import 'package:lumina_marketplace_server/src/repositories/repositories.dart';
+import 'package:lumina_marketplace_server/src/util.dart';
+import 'package:lumina_marketplace_server/src/services/auth_service.dart';
+import 'package:lumina_marketplace_server/src/services/listing_service.dart';
 
 /// Reports, the moderator queue, unlist/restore, suspension (the terms'
 /// penalty clause) and the audit log.

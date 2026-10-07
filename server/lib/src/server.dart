@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
-import 'config.dart';
-import 'errors.dart';
-import 'http/api.dart';
-import 'http/docs.dart';
-import 'http/middleware.dart';
-import 'http/router.dart';
-import 'http/static_files.dart';
-import 'log.dart';
-import 'services/services.dart';
+import 'package:lumina_marketplace_server/src/config.dart';
+import 'package:lumina_marketplace_server/src/errors.dart';
+import 'package:lumina_marketplace_server/src/http/api.dart';
+import 'package:lumina_marketplace_server/src/http/docs.dart';
+import 'package:lumina_marketplace_server/src/http/middleware.dart';
+import 'package:lumina_marketplace_server/src/http/router.dart';
+import 'package:lumina_marketplace_server/src/http/static_files.dart';
+import 'package:lumina_marketplace_server/src/log.dart';
+import 'package:lumina_marketplace_server/src/services/services.dart';
 
 /// The running marketplace: `/api/v1/*` (the API), `/openapi.yaml` and
 /// `/docs` (its documentation), and — when [MarketplaceConfig.webDir] is set —

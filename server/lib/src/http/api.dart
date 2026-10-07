@@ -4,14 +4,14 @@ import 'dart:io';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 import 'package:shelf/shelf.dart';
 
-import '../errors.dart';
-import '../repositories/records.dart';
-import '../services/auth_service.dart';
-import '../services/crash_report_store.dart';
-import '../services/services.dart';
-import '../terms.dart';
-import 'middleware.dart';
-import 'router.dart';
+import 'package:lumina_marketplace_server/src/errors.dart';
+import 'package:lumina_marketplace_server/src/repositories/records.dart';
+import 'package:lumina_marketplace_server/src/services/auth_service.dart';
+import 'package:lumina_marketplace_server/src/services/crash_report_store.dart';
+import 'package:lumina_marketplace_server/src/services/services.dart';
+import 'package:lumina_marketplace_server/src/terms.dart';
+import 'package:lumina_marketplace_server/src/http/middleware.dart';
+import 'package:lumina_marketplace_server/src/http/router.dart';
 
 const refreshCookie = 'lm_refresh';
 const _maxJsonBytes = 1024 * 1024;

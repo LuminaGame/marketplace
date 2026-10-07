@@ -41,7 +41,7 @@ Without `MARKETPLACE_API` the app talks to the origin it was served from. Use th
 
 ## The 3D view
 
-Model listing pages have an **Images / 3D view** toggle when the version has a preview model. The 3D view runs the Lumina engine in the browser (`package:lumina/lumina_runtime.dart` on flutter_filament's WebGL2 WebAssembly module) and renders the preview GLB the server derived from the archive: drag to orbit, right-drag or Shift+drag to pan, wheel to zoom, double-click or **Reset view** to re-frame, and **Fullscreen**. The runtime is a deferred library and the wasm module (`filament/flutter_filament.{js,wasm}`) loads only when someone opens the 3D view; the server serves it as `application/wasm` with an ETag.
+Model listing pages have an **Images / 3D view** toggle when the version has a preview model. The 3D view runs the Lumina engine in the browser (`package:lumina_widgets/lumina_game.dart`, the engine runtime plus its game widget, on flutter_filament's WebGL2 WebAssembly module) and renders the preview GLB the server derived from the archive: drag to orbit, right-drag or Shift+drag to pan, wheel to zoom, double-click or **Reset view** to re-frame, and **Fullscreen**. The runtime is a deferred library and the wasm module (`filament/flutter_filament.{js,wasm}`) loads only when someone opens the 3D view; the server serves it as `application/wasm` with an ETag.
 
 ## Tests
 

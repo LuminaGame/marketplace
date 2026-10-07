@@ -144,6 +144,8 @@ melos run serve          # the API with the sample listings (needs MARKETPLACE_J
 melos run build:web      # flutter build web --release in web/
 ```
 
+Every package enables the `always_use_package_imports` lint: a file imports another file of its own package by its `package:` URI (`package:lumina_marketplace_server/src/...`), never by a relative path.
+
 Tests use real temporary SQLite databases and storage folders, real servers on ephemeral ports and the real meshes from `test-assets/` (or `LUMINA_TEST_ASSETS`); the plugin publish tests read `lumina_plugin_pcg` from the plugins checkout at `../plugins` (or `LUMINA_PLUGINS_DIR`).
 
 Smoke tests, with evidence written to `build/smoke_artifacts/`:

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:archive/archive.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 
-import '../util.dart';
+import 'package:lumina_marketplace_server/src/util.dart';
 
 class InvalidArchiveException implements Exception {
   const InvalidArchiveException(this.message, [this.path, this.paths = const []]);

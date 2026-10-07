@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'game_template.dart' show singleTopFolder;
-import 'licenses.dart';
+import 'package:lumina_marketplace_shared/src/game_template.dart' show singleTopFolder;
+import 'package:lumina_marketplace_shared/src/licenses.dart';
 
 /// The Lumina plugin package format as the marketplace reads it,
 /// shared by the server (which refuses packages that break it) and the web

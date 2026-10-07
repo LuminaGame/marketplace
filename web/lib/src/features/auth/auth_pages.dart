@@ -1,9 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import '../../data/session.dart';
-import '../../platform/files.dart';
-import '../../widgets/common.dart';
+import 'package:lumina_marketplace_web/src/data/session.dart';
+import 'package:lumina_marketplace_web/src/platform/files.dart';
+import 'package:lumina_marketplace_web/src/widgets/common.dart';
 
 /// A centered form card.
 class _AuthCard extends StatelessWidget {

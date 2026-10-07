@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import 'orbit_camera.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/orbit_camera.dart';
 
 /// Off the web (the VM widget tests) there is no browser canvas: the 3D view
 /// reports that it needs one. The web build uses `lumina_preview_scene.dart`.

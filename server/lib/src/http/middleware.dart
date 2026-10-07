@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
 
-import '../errors.dart';
-import '../log.dart';
+import 'package:lumina_marketplace_server/src/errors.dart';
+import 'package:lumina_marketplace_server/src/log.dart';
 
 const _jsonHeaders = {'content-type': 'application/json; charset=utf-8'};
 

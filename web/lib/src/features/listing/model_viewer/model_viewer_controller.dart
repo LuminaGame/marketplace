@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 
-import 'orbit_camera.dart';
-import 'preview_download.dart';
-import 'preview_runtime.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/orbit_camera.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/preview_download.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/preview_runtime.dart';
 
 /// Where a 3D view is on its way to a rendered model.
 enum ViewerStage {

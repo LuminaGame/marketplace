@@ -4,11 +4,11 @@
 /// HTTP client.
 library;
 
-export 'src/categories.dart';
-export 'src/client.dart';
-export 'src/dto.dart';
-export 'src/errors.dart';
-export 'src/game_template.dart';
-export 'src/install_paths.dart';
-export 'src/licenses.dart';
-export 'src/plugin_package.dart';
+export 'package:lumina_marketplace_shared/src/categories.dart';
+export 'package:lumina_marketplace_shared/src/client.dart';
+export 'package:lumina_marketplace_shared/src/dto.dart';
+export 'package:lumina_marketplace_shared/src/errors.dart';
+export 'package:lumina_marketplace_shared/src/game_template.dart';
+export 'package:lumina_marketplace_shared/src/install_paths.dart';
+export 'package:lumina_marketplace_shared/src/licenses.dart';
+export 'package:lumina_marketplace_shared/src/plugin_package.dart';

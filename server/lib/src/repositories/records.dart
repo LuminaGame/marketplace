@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 
-import '../storage/zip_validator.dart';
+import 'package:lumina_marketplace_server/src/storage/zip_validator.dart';
 
 // Rows as the repositories return them. Services turn them into the shared
 // DTOs.

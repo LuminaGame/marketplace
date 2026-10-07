@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 
-import 'http_client_io.dart' if (dart.library.js_interop) 'http_client_web.dart' as impl;
+import 'package:lumina_marketplace_web/src/platform/http_client_io.dart' if (dart.library.js_interop) 'http_client_web.dart' as impl;
 
 /// An HTTP client that, in the browser, sends credentials so the backend's
 /// httpOnly refresh cookie travels with `/auth/refresh`.

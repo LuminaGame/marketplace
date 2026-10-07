@@ -6,8 +6,8 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 // runtime and flutter_filament's web bindings) into its own part files, which
 // the browser fetches only when a 3D view opens. Off the web — the widget
 // tests on the VM — the stub stands in: it has no WebGL2 to render with.
-import 'lumina_preview_scene_stub.dart' if (dart.library.js_interop) 'lumina_preview_scene.dart' deferred as scene;
-import 'orbit_camera.dart';
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/lumina_preview_scene_stub.dart' if (dart.library.js_interop) 'lumina_preview_scene.dart' deferred as scene;
+import 'package:lumina_marketplace_web/src/features/listing/model_viewer/orbit_camera.dart';
 
 /// Where the web build serves flutter_filament's WebAssembly module and its
 /// loader (`tool/sync_filament_module.dart` copies them into `web/filament/`).

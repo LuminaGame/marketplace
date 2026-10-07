@@ -1,4 +1,4 @@
-import 'licenses.dart';
+import 'package:lumina_marketplace_shared/src/licenses.dart';
 
 /// What a listing is. The wire name (`model`, `game_template`, …) is what the
 /// API, the database and the install manifest use.

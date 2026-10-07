@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'files_io.dart' if (dart.library.js_interop) 'files_web.dart' as impl;
+import 'package:lumina_marketplace_web/src/platform/files_io.dart' if (dart.library.js_interop) 'files_web.dart' as impl;
 
 /// A file the user picked.
 class PickedFile {

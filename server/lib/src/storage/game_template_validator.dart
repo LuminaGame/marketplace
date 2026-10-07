@@ -1,7 +1,7 @@
 import 'package:archive/archive.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 
-import '../errors.dart';
+import 'package:lumina_marketplace_server/src/errors.dart';
 
 /// Checks `game_template` archives against the game template format (v1;
 /// the rules live in the shared package's [checkGameTemplate] so

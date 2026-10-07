@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import '../errors.dart';
-import 'auth_service.dart';
+import 'package:lumina_marketplace_server/src/errors.dart';
+import 'package:lumina_marketplace_server/src/services/auth_service.dart';
 
 /// A crash report Lumina Studio sent (`POST /api/v1/crash-reports`): checked
 /// and written as one JSON file under `<storageDir>/crash-reports/<yyyy>/<mm>/`,

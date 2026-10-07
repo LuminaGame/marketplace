@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:yaml/yaml.dart';
 
-import 'install_paths.dart';
+import 'package:lumina_marketplace_shared/src/install_paths.dart';
 
 /// The game template archive format, shared by the server (which
 /// refuses archives that break it), the web publish flow and Lumina Studio

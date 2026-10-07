@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:web/web.dart' as web;
 
-import 'files.dart';
+import 'package:lumina_marketplace_web/src/platform/files.dart';
 
 FileSource platformFileSource() => const _BrowserFileSource();
 

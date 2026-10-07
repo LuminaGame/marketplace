@@ -3,9 +3,9 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import 'src/app.dart';
-import 'src/data/session.dart';
-import 'src/platform/http_client.dart';
+import 'package:lumina_marketplace_web/src/app.dart';
+import 'package:lumina_marketplace_web/src/data/session.dart';
+import 'package:lumina_marketplace_web/src/platform/http_client.dart';
 
 /// The API the app talks to. Served by the backend (production mode), that is
 /// the page's own origin; `--dart-define=MARKETPLACE_API=http://127.0.0.1:8787`

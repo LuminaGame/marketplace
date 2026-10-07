@@ -4,10 +4,10 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
-import 'categories.dart';
-import 'dto.dart';
-import 'errors.dart';
-import 'licenses.dart';
+import 'package:lumina_marketplace_shared/src/categories.dart';
+import 'package:lumina_marketplace_shared/src/dto.dart';
+import 'package:lumina_marketplace_shared/src/errors.dart';
+import 'package:lumina_marketplace_shared/src/licenses.dart';
 
 /// The Lumina Marketplace API client, shared by the web front end and Lumina
 /// Studio.

@@ -2,9 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:lumina_marketplace_shared/lumina_marketplace_shared.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-import '../../data/session.dart';
-import '../../theme/marketplace_theme.dart';
-import '../../widgets/common.dart';
+import 'package:lumina_marketplace_web/src/data/session.dart';
+import 'package:lumina_marketplace_web/src/theme/marketplace_theme.dart';
+import 'package:lumina_marketplace_web/src/widgets/common.dart';
 
 /// Runs one search. The query lives in the URL (`/search?q=…&category=…`), so
 /// every filter change is a navigation and the browser's back button works.
