@@ -73,11 +73,13 @@ const contentExtensions = {
 };
 
 /// Extensions that make an upload need a code license.
-const codeExtensions = {'dart', 'c', 'cc', 'cpp', 'h', 'hpp', 'js', 'glsl', 'vert', 'frag', 'comp', 'mat'};
+/// (`dill`: the Dart kernel a kernel plugin's process ships as.)
+const codeExtensions = {'dart', 'c', 'cc', 'cpp', 'h', 'hpp', 'js', 'glsl', 'vert', 'frag', 'comp', 'mat', 'dill'};
 
 /// Allowed, but neither content nor code on their own (`.lmplugin` is a
 /// Lumina plugin's JSON manifest, which every plugin listing carries).
-const neutralExtensions = {'json', 'yaml', 'yml', 'md', 'txt', 'lmproject', 'lmplugin', 'csv', 'lock'};
+/// `.sha256` is the checksum beside a shipped kernel.
+const neutralExtensions = {'json', 'yaml', 'yml', 'md', 'txt', 'lmproject', 'lmplugin', 'csv', 'lock', 'sha256'};
 
 /// Extensionless file names that are allowed.
 const allowedBareNames = {'license', 'licence', 'readme', 'notice', 'changelog', 'copying', 'authors'};
