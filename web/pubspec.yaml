@@ -31,12 +31,12 @@ dependencies:
     git:
       url: https://github.com/LuminaGame/lumina.git
       path: lumina_widgets
-      ref: 5981aeec85fa2d456323103656b5879784fd4458
+      ref: ca32f86b537bf836017d64bd98f10f39bc01e8af
   flutter_filament:
     git:
       url: https://github.com/LuminaGame/lumina.git
       path: flutter_filament
-      ref: 5981aeec85fa2d456323103656b5879784fd4458
+      ref: ca32f86b537bf836017d64bd98f10f39bc01e8af
   vector_math: ^2.1.4
   crypto: ^3.0.7
 
@@ -54,7 +54,7 @@ dev_dependencies:
     git:
       url: https://github.com/LuminaGame/tools.git
       path: lumina_smoke
-      ref: 7f6b46c8379ae61e5dc80fe243eddf41b3ac8f3e
+      ref: f204e31a666523d0bc2c8654df1d61da2cfc203d
   puppeteer: ^3.26.0
   test: ^1.31.1
 
